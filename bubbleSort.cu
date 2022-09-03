@@ -88,7 +88,7 @@ int CheckFun(int* nums1, int* nums2, int n) {
     fprintf(fp, "%d\n", n);
     for (int i = 0; i < n; i++) {
         if (nums1[i] != nums2[i]) {
-            fprintf(fp, "%d:%d\t%d\n", i, nums1[i], nums2[i]);
+            //fprintf(fp, "%d:%d\t%d\n", i, nums1[i], nums2[i]);
             return 1;
         }
     }
