@@ -2,7 +2,6 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include <stdio.h>
-#include <time.h>
 #include <math.h>
 
 void mergesort(int* data, int size, dim3 threadsPerBlock, dim3 blocksPerGrid);
@@ -28,13 +27,8 @@ int main() {
 
 	dim3 threadPerBlock(32,1,1);
 	dim3 blockPerGrid((size+threadPerBlock.x - 1)/threadPerBlock.x,1,1);
-	float  s = GetTickCount();
 	mergesort(nums1, size, threadPerBlock, blockPerGrid);
-	float tp = GetTickCount() - s;
-	printf("Parallel Sorting Time: %fms\n", tp);
 	merge_sort_up2down(nums2, 0,size-1);
-	float ts = GetTickCount() - tp;
-	printf("bubble Sorting Time: %fms\n", ts);
 	do {
 		int _ = CheckFun(nums1, nums2, size);
 		if (_ == 0) {
@@ -155,6 +149,7 @@ int CheckFun(int nums1[], int nums2[], int n){
 	for (int i = 0; i < n; i++) {
 		if (nums1[i] != nums2[i]) {
 			printf("%d:%d\t%d\n", i, nums1[i], nums2[i]);
+			return 1;
 		}
 	}
 	return 0;
