@@ -3,7 +3,6 @@
 #include "device_launch_parameters.h"
 #include <stdio.h>
 #include <time.h>
-#include <Windows.h>
 #include <math.h>
 
 void mergesort(int* data, int size, dim3 threadsPerBlock, dim3 blocksPerGrid);
