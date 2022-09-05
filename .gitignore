@@ -4,6 +4,8 @@
 
 .exe
 .txt
+.o
+
 
 ## User settings
 xcuserdata/

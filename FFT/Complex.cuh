@@ -13,7 +13,8 @@ public:
     Complex(double x,double y){
         real=x;imag=y;
     }
-    __device__ static Complex getW(int n,int k){}
-}
+};
+
+Complex W(int n);
 
 #endif
