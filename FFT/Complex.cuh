@@ -13,8 +13,9 @@ public:
     Complex(double x,double y){
         real=x;imag=y;
     }
+    Complex W(int n);
 };
 
-Complex W(int n);
+
 
 #endif
