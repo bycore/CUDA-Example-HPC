@@ -3,8 +3,8 @@
 #include "device_launch_parameters.h"
 #include "error.cuh"
 
-void bitonic_sort(float* values, int size);
-__global__ void bitonic_sort_step(float* dev_values, int j, int k);
+void SequentialBubbleSort(float* nums, int size);
+int CheckFun(float* nums1, float* nums2, int n);
 
 __device__ void swap_float(float* f1, float* f2) {
     float tmp = *f1;
@@ -82,66 +82,54 @@ void float_sort(float arr[], int len) {
     }
 }
 
+
 int main(void) {
-    int size = 100;
+    int size = 66535;
     float* values = (float*)malloc(size * sizeof(float));
+    float* values_cpu = (float*)malloc(size * sizeof(float));
     float* dNums;
     srand(time(NULL));
     for (int i = 0; i < size; ++i) {
         values[i] = size - i;
+        values_cpu[i] = size - i;
     }
     CHECK(cudaMalloc((void**)&dNums, sizeof(float) * size));
     CHECK(cudaMemcpy(dNums, values, sizeof(float) * size, cudaMemcpyHostToHost));
     float_sort(dNums, size);
     CHECK(cudaMemcpy(values,dNums,sizeof(float) * size, cudaMemcpyDeviceToHost));
+    SequentialBubbleSort(values_cpu,size);
+    int _ = CheckFun(values, values_cpu, size);
+    if (_ == 0) {
+        printf("successf!\n");
+    } else {
+        printf("wrong!\n");
+    }
+    free(values);
+    free(values_cpu);
+    cudaFree(dNums);
+}
+
+void SequentialBubbleSort(float* nums, int size) {
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size - 1; j++) {
+            if (nums[j] > nums[j + 1]) {
+                int temp = nums[j];
+                nums[j] = nums[j + 1];
+                nums[j + 1] = temp;
+            }
+        }
+    }
+}
+
+int CheckFun(float* nums1, float* nums2, int n) {
     FILE* fp = NULL;
     fp = fopen("gz.txt", "w+");
-    for (int i = 0; i < size; i++) {
-        fprintf(fp, "%d\t%f \n", i, values[i]);
-    }
-}
-__global__ void bitonic_sort_step(float* dev_values, int j, int k) {
-    unsigned int i, ixj; /* Sorting partners: i and ixj */
-    i = threadIdx.x + blockDim.x * blockIdx.x;
-    ixj = i ^ j;
-
-    /* The threads with the lowest ids sort the array. */
-    if ((ixj) > i) {
-        if ((i & k) == 0) {
-            /* Sort ascending */
-            if (dev_values[i] > dev_values[ixj]) {
-                /* exchange(i,ixj); */
-                float temp = dev_values[i];
-                dev_values[i] = dev_values[ixj];
-                dev_values[ixj] = temp;
-            }
-        }
-        if ((i & k) != 0) {
-            /* Sort descending */
-            if (dev_values[i] < dev_values[ixj]) {
-                /* exchange(i,ixj); */
-                float temp = dev_values[i];
-                dev_values[i] = dev_values[ixj];
-                dev_values[ixj] = temp;
-            }
+    fprintf(fp, "%d\n", n);
+    for (int i = 0; i < n; i++) {
+        if (nums1[i] != nums2[i]) {
+            //fprintf(fp, "%d:%d\t%d\n", i, nums1[i], nums2[i]);
+            return 1;
         }
     }
-}
-
-void bitonic_sort(float* values, int size) {
-    float* dev_values;
-    // Allocate space for device copies of values
-    cudaMalloc((void**)&dev_values, size * sizeof(float));
-    cudaMemcpy(dev_values, values, size * sizeof(float), cudaMemcpyHostToDevice);
-
-    dim3 blocks(32, 1);                                /* Number of blocks   */
-    dim3 threads((size + blocks.x - 1) / blocks.x, 1); /* Number of threads  */
-
-    for (int k = 2; k <= size; k <<= 1) {
-        for (int j = k >> 1; j > 0; j >>= 1) {
-            bitonic_sort_step<<<blocks, threads>>>(dev_values, j, k);
-        }
-    }
-    cudaMemcpy(values, dev_values, size * sizeof(float), cudaMemcpyDeviceToHost);
-    cudaFree(dev_values);
+    return 0;
 }
