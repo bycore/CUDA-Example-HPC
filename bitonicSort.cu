@@ -5,11 +5,42 @@
 
 void SequentialBubbleSort(float* nums, int size);
 int CheckFun(float* nums1, float* nums2, int n);
+void float_sort(float arr[], int len);
+__global__ void _bitonic_sort(float* d_arr, unsigned stride, unsigned inner_stride);
 
 __device__ void swap_float(float* f1, float* f2) {
     float tmp = *f1;
     *f1 = *f2;
     *f2 = tmp;
+}
+
+
+
+
+int main(void) {
+    int size = 66535;
+    float* values = (float*)malloc(size * sizeof(float));
+    float* values_cpu = (float*)malloc(size * sizeof(float));
+    float* dNums;
+    srand(time(NULL));
+    for (int i = 0; i < size; ++i) {
+        values[i] = size - i;
+        values_cpu[i] = size - i;
+    }
+    CHECK(cudaMalloc((void**)&dNums, sizeof(float) * size));
+    CHECK(cudaMemcpy(dNums, values, sizeof(float) * size, cudaMemcpyHostToHost));
+    float_sort(dNums, size);
+    CHECK(cudaMemcpy(values,dNums,sizeof(float) * size, cudaMemcpyDeviceToHost));
+    SequentialBubbleSort(values_cpu,size);
+    int _ = CheckFun(values, values_cpu, size);
+    if (_ == 0) {
+        printf("successf!\n");
+    } else {
+        printf("wrong!\n");
+    }
+    free(values);
+    free(values_cpu);
+    cudaFree(dNums);
 }
 
 __global__ void _bitonic_sort(float* d_arr, unsigned stride, unsigned inner_stride) {
@@ -80,33 +111,6 @@ void float_sort(float arr[], int len) {
         cudaMemcpy(arr, d_input_arr, sizeof(float) * len, cudaMemcpyDeviceToDevice);
         cudaFree(d_input_arr);
     }
-}
-
-
-int main(void) {
-    int size = 66535;
-    float* values = (float*)malloc(size * sizeof(float));
-    float* values_cpu = (float*)malloc(size * sizeof(float));
-    float* dNums;
-    srand(time(NULL));
-    for (int i = 0; i < size; ++i) {
-        values[i] = size - i;
-        values_cpu[i] = size - i;
-    }
-    CHECK(cudaMalloc((void**)&dNums, sizeof(float) * size));
-    CHECK(cudaMemcpy(dNums, values, sizeof(float) * size, cudaMemcpyHostToHost));
-    float_sort(dNums, size);
-    CHECK(cudaMemcpy(values,dNums,sizeof(float) * size, cudaMemcpyDeviceToHost));
-    SequentialBubbleSort(values_cpu,size);
-    int _ = CheckFun(values, values_cpu, size);
-    if (_ == 0) {
-        printf("successf!\n");
-    } else {
-        printf("wrong!\n");
-    }
-    free(values);
-    free(values_cpu);
-    cudaFree(dNums);
 }
 
 void SequentialBubbleSort(float* nums, int size) {
