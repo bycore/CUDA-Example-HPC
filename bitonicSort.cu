@@ -18,14 +18,15 @@ __device__ void swap_float(float* f1, float* f2) {
 
 
 int main(void) {
-    int size = 66535;
+    int size = 100;
     float* values = (float*)malloc(size * sizeof(float));
     float* values_cpu = (float*)malloc(size * sizeof(float));
     float* dNums;
     srand(time(NULL));
     for (int i = 0; i < size; ++i) {
-        values[i] = size - i;
-        values_cpu[i] = size - i;
+        float num=random();
+        values[i] = num;
+        values_cpu[i] = num;
     }
     CHECK(cudaMalloc((void**)&dNums, sizeof(float) * size));
     CHECK(cudaMemcpy(dNums, values, sizeof(float) * size, cudaMemcpyHostToHost));
@@ -130,6 +131,7 @@ int CheckFun(float* nums1, float* nums2, int n) {
     fp = fopen("gz.txt", "w+");
     fprintf(fp, "%d\n", n);
     for (int i = 0; i < n; i++) {
+        fprintf(fp, "%d:%f\t%f\n", i, nums1[i], nums2[i]);
         if (nums1[i] != nums2[i]) {
             //fprintf(fp, "%d:%d\t%d\n", i, nums1[i], nums2[i]);
             return 1;
@@ -137,3 +139,5 @@ int CheckFun(float* nums1, float* nums2, int n) {
     }
     return 0;
 }
+
+//https://blog.csdn.net/xbinworld/article/details/76408595
