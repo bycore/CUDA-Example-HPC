@@ -57,7 +57,7 @@ int main() {
 void OddEvenSwitchSort(int nums[], int size) {
     int* dNums;
     CHECK(cudaMalloc((void**)&dNums, sizeof(int) * size));
-    CHECK(cudaMemcpy(dNums, nums, sizeof(int) * size, cudaMemcpyHostToHost));
+    CHECK(cudaMemcpy(dNums, nums, sizeof(int) * size, cudaMemcpyHostToDevice));
 
     dim3 threadPerBlock(32);
     dim3 blockNum((size + threadPerBlock.x - 1) / threadPerBlock.x);
