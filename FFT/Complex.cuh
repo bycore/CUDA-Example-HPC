@@ -9,11 +9,20 @@ class Complex{
 public:
     double real;
     double imag;
+    Complex(){}
     
-    Complex(double x,double y){
-        real=x;imag=y;
+    Complex getComplex(double x,double y){
+        Complex r;
+        r.real=x;r.imag=y;
+        return r;
     }
-    Complex W(int n);
+
+    __device__ Complex(double x,double y){
+        this->real=x;this->imag=y;
+    }
+
+    __device__ Complex W(int n);
+    __device__ Complex W(int n,int k);
 };
 
 

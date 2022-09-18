@@ -2,6 +2,8 @@
 #include "Complex.cuh"
 
 int main(){
-    printf("%lf %lf\n",W(1).real,W(1).imag);
+    Complex a;
+    a=a.getComplex(1,1);
+    printf("%lf %lf\n",a.real,a.imag);
     return 0;
 }
