@@ -10,14 +10,8 @@ public:
     double real;
     double imag;
     Complex(){}
-    
-    Complex getComplex(double x,double y){
-        Complex r;
-        r.real=x;r.imag=y;
-        return r;
-    }
 
-    __device__ Complex(double x,double y){
+    __host__ __device__ Complex(double x,double y){
         this->real=x;this->imag=y;
     }
 
