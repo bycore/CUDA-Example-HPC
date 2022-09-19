@@ -2,7 +2,7 @@ ASSOCIATE_DIR=../Complex/
 
 NVCC = nvcc -arch sm_50
 
-TARGETBIN:= FFT_example
+TARGETBIN:= FFT_example.out
 TEST_SOURCE = FFT_example.cu
 
 
