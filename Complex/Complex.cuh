@@ -47,11 +47,11 @@ class Complex {
         return *this;
     }
     CUDA_CALLABLE_MEMBER Complex operator+(const Complex& c) {
-        Complex res(this->re + c.re,this->im + c.im);
+        Complex res(this->re + c.re, this->im + c.im);
         return res;
     }
     CUDA_CALLABLE_MEMBER Complex operator-(const Complex& c) {
-        Complex res(this->re - c.re,this->im - c.im);
+        Complex res(this->re - c.re, this->im - c.im);
         return res;
     }
     CUDA_CALLABLE_MEMBER Complex operator*(const Complex& c) {
