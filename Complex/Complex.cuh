@@ -26,9 +26,13 @@ class Complex {
     CUDA_CALLABLE_MEMBER void real(double __re) { this->re = __re; }
     CUDA_CALLABLE_MEMBER void imag(double __im) { this->im = __im; }
 
-    CUDA_CALLABLE_MEMBER void GetRandomComplex() {
+    void GetRandomComplex() {
         this->re = (double)rand() / rand();
         this->im = (double)rand() / rand();
+    }
+    void GetRandomReal() {
+        this->re = (double)rand() / rand();
+        this->im = 0.0;
     }
 
     CUDA_CALLABLE_MEMBER Complex& operator=(const Complex& c) {
