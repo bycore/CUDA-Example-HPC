@@ -3,6 +3,8 @@
 
 int main(){
     Complex a(1,1);
-    printf("%lf %lf\n",a.real,a.imag);
+    Complex b(2,2);
+    Complex c=a+b;
+    printf("%lf %lf\n",c.real(),c.imag());
     return 0;
 }
