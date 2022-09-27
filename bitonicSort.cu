@@ -18,7 +18,7 @@ __device__ void swap_float(float* f1, float* f2) {
 
 
 int main(void) {
-    int size = 100;
+    int size = 66535;
     float* values = (float*)malloc(size * sizeof(float));
     float* values_cpu = (float*)malloc(size * sizeof(float));
     float* dNums;
