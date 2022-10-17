@@ -5,7 +5,6 @@
 *.exe
 *.txt
 *.o
-*.mat
 .vscode
 
 ## User settings
