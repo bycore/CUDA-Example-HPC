@@ -1,7 +1,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include<string.h>
+#include<math.h>
 void coo2csr(int row_length, int nnz, float* values, int* row, int* col, float* csr_values, int* col_idx, int* row_start);
 void sort(int* col_idx, float* a, int start, int end);
 
@@ -33,7 +34,7 @@ static void conv(int* col_idx, int* row_off, float* values, int nnz_max, int nnz
     float* coovalues;
     row = (int*)malloc(sizeof(int) * (nnz));
     column = (int*)malloc(sizeof(int) * (nnz));
-    coovalues = (int*)malloc(sizeof(int) * (nnz));
+    coovalues = (float*)malloc(sizeof(int) * (nnz));
     values = (float*)malloc(sizeof(float) * (nnz));
     memset(values, 0, sizeof(values));
     col_idx = (int*)malloc(sizeof(int) * nnz);
@@ -74,8 +75,8 @@ static void conv(int* col_idx, int* row_off, float* values, int nnz_max, int nnz
     return;
 }
 int main() {
-    int *col_idx, *row_off, *nnz_max, *nnz_avg, *nnz_dev;
-    double* values;
+    int *col_idx, *row_off, nnz_max, nnz_avg, nnz_dev;
+    float* values;
     conv(col_idx, row_off, values, nnz_max, nnz_avg, nnz_dev);
 }
 
