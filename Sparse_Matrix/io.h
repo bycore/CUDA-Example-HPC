@@ -60,25 +60,26 @@ static void conv(int* col_idx, int* row_off, float* values, int* row_length, int
     tot_nnz += *nnz - row_off[*row_length - 1];
     tot_nnz_square += (*nnz - row_off[*row_length - 1]);
 
-    if ((nnz - row_off[*row_length - 1]) > nnz_max)
-        nnz_max = nnz - row_off[*row_length - 1];
+    if ((*nnz - row_off[*row_length - 1]) > nnz_max)
+        nnz_max = *nnz - row_off[*row_length - 1];
 
     nnz_avg = tot_nnz / *row_length;
     nnz_dev = (int)sqrt(tot_nnz_square / *row_length - (nnz_avg * nnz_avg));
 
-    row_off[*row_length] = nnz;
+    row_off[*row_length] = *nnz;
     free(row);
     free(column);
     free(coovalues);
+    fclose(file);
     return;
 }
-int main() {
-    int m=0,n=0,cnt=0;
-    int *col_idx, *row_off, *nnz_max=&m, *nnz_avg=&n, *nnz_dev=&cnt;
-    float* values;
-    conv(col_idx, row_off, values, nnz_max, nnz_avg, nnz_dev);
-    printf("%d %d %d\n",m, n, cnt);
-}
+// int main() {
+//     int m=0,n=0,cnt=0;
+//     int *col_idx, *row_off, *nnz_max=&m, *nnz_avg=&n, *nnz_dev=&cnt;
+//     float* values;
+//     conv(col_idx, row_off, values, nnz_max, nnz_avg, nnz_dev);
+//     printf("%d %d %d\n",m, n, cnt);
+// }
 
 void coo2csr(int row_length, int nnz, float* values, int* row, int* col, float* csr_values, int* col_idx, int* row_start) {
     int i, l;
